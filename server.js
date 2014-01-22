@@ -8,7 +8,7 @@ var server = express();
 server.http().io()
 
 //Connect Redis
-//var RedisStore = require('connect-redis')(express);
+var RedisStore = require('connect-redis')(express);
 
 var users = [];
 
@@ -30,8 +30,8 @@ server.configure(function(){
   server.use( express.bodyParser() );
 
   server.use( express.session({
-    secret : "lolcatz",
-    // store  : new RedisStore({})
+    secret : "secretHach93849",
+    store  : new RedisStore({})
     // store  : new RedisStore({
     //  host : conf.redis.host,
     //  port : conf.redis.port,
@@ -52,16 +52,49 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
+var isntLoggedIn = function (req,res,next) {
+  if(!req.session.user){
+    res.redirect('/');
+    return;
+  }
+  next();
+};
+
 server.get('/',function (req,res) {
   res.render('home');
+});
+
+server.get('/chat',isntLoggedIn,function (req,res) {
+  res.render('chat',{
+    user:req.session.user,
+    users: users
+  });
 });
 
 server.get('/messages/:message',function (req,res) {
   res.send('Tu mensaje es '+req.params.message);
 });
 
+server.get('/log-out',function (req,res){
+  users = _.without(users, req.session.user)
+  server.io.broadcast('log-out',{username: req.session.user});
+  req.session.destroy();
+  res.redirect('/')
+});
+
 server.post('/log-in',function (req,res){
-  res.send('Envio el post');
+  users.push(req.body.username);
+
+  req.session.user = req.body.username;
+  server.io.broadcast('log-in',{username: req.session.user});
+
+  res.redirect('/chat');
+});
+
+server.io.route('Connect?',function(req){
+  req.io.emit('saludo',{
+    message: 'Server Ready'
+  });
 });
 
 server.listen(3000);
