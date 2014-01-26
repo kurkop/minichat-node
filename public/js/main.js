@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).on('ready',function(){
   window.io = io.connect();
 
   io.on('connect',function(socket){
