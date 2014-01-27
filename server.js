@@ -44,57 +44,19 @@ server.configure(function(){
   server.use( passport.session() );
 });
 
+//Controllers
+var homeController = require('./minichat/controllers/home');
+homeController(server,users);
+
+var chatController = require('./minichat/controllers/chat');
+chatController(server,users);
+
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
-});
-
-var isntLoggedIn = function (req,res,next) {
-  if(!req.session.user){
-    res.redirect('/');
-    return;
-  }
-  next();
-};
-
-server.get('/',function (req,res) {
-  res.render('home');
-});
-
-server.get('/chat',isntLoggedIn,function (req,res) {
-  res.render('chat',{
-    user:req.session.user,
-    users: users
-  });
-});
-
-server.get('/messages/:message',function (req,res) {
-  res.send('Tu mensaje es '+req.params.message);
-});
-
-server.get('/log-out',function (req,res){
-  users = _.without(users, req.session.user)
-  server.io.broadcast('log-out',{username: req.session.user});
-  req.session.destroy();
-  res.redirect('/')
-});
-
-server.post('/log-in',function (req,res){
-  users.push(req.body.username);
-
-  req.session.user = req.body.username;
-  server.io.broadcast('log-in',{username: req.session.user});
-
-  res.redirect('/chat');
-});
-
-server.io.route('Connect?',function(req){
-  req.io.emit('saludo',{
-    message: 'Server Ready'
-  });
 });
 
 server.listen(3000);
