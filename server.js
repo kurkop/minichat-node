@@ -10,9 +10,9 @@ server.http().io()
 //Connect Redis
 if (process.env.REDISTOGO_URL) {
   var rtg   = require("url").parse(process.env.REDISTOGO_URL);
-  var RedisStore = require("redis").createClient(rtg.port, rtg.hostname);
+  var RedisStore = require("connect-redis").createClient(rtg.port, rtg.hostname);
 
-  redis.auth(rtg.auth.split(":")[1]);
+  RedisStore.auth(rtg.auth.split(":")[1]);
 } else {
     var RedisStore = require('connect-redis')(express);
 }
