@@ -50,5 +50,7 @@ var chatController = require('./minichat/controllers/chat');
 chatController(server,users);
 
 
-
-server.listen(80);
+var port = Number(process.env.PORT || 3000);
+server.listen(port, function() {
+  console.log("Listening on " + port);
+});
