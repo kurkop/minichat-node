@@ -21,6 +21,7 @@ swig.setDefaults({ cache: false });
 
 //Connect Redis
 if (process.env.REDISTOGO_URL) {
+
   var redisUrl = url.parse(process.env.REDISTOGO_URL);
   var redisAuth = redisUrl.auth.split(":"); // auth 1st part is username and 2nd is password separated by ":"
 
@@ -29,8 +30,8 @@ if (process.env.REDISTOGO_URL) {
     host: redisUrl.hostname,
     port: redisUrl.port,
     //user: conf.redis.user,
-    db: redisAuth[0],
-    pass: redisAuth[1]
+    //db: redisAuth[0],
+    //pass: redisAuth[1]
   })
 } else {
     var SessionStore = new RedisStore({
