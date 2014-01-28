@@ -39,10 +39,8 @@ server.configure(function(){
     //  pass : conf.redis.pass
     // });  
   }) );
-
-  server.use( passport.initialize() );
-  server.use( passport.session() );
 });
+
 
 //Controllers
 var homeController = require('./minichat/controllers/home');
@@ -51,12 +49,6 @@ homeController(server,users);
 var chatController = require('./minichat/controllers/chat');
 chatController(server,users);
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
 
-server.listen(3000);
+server.listen(80);

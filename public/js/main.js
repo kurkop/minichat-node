@@ -3,7 +3,7 @@ $(document).on('ready',function(){
 
   io.on('connect',function(socket){
     console.log('Connect...');
-    io.emit('Connect?');
+    io.emit('Connect');
   });
 
   io.on('saludo',function(data){

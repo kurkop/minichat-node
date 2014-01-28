@@ -9,19 +9,12 @@
     "underscore": "~1.5.2",
     "connect-redis": "~1.4.6"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kurkop/minichat-node"
-  },
   "keywords": [
     "minichat-node",
     "heroku"
   ],
   "author": "Juan Pablo Arias",
   "license": "BSD",
-  "bugs": {
-    "url": "https://github.com/kurkop/minichat-node/issues"
-  },
   "engines": {
     "node": "0.10.23"
   },

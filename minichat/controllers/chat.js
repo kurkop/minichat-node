@@ -21,7 +21,7 @@ var chatController = function (server,users){
     res.send('Tu mensaje es '+req.params.message);
   });
 
-  server.io.route('Connect?',function(req){
+  server.io.route('Connect',function(req){
     req.io.emit('saludo',{
       message: 'Server Ready'
     });
