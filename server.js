@@ -2,6 +2,7 @@ var express = require('express.io'),
     swig = require('swig'),
     _ = require('underscore'),
     RedisStore = require('connect-redis')(express),
+    url = require('url'),
     passport = require('passport');
 
 //Connect Express.io
@@ -10,8 +11,8 @@ server.http().io()
 
 // Dotenv loads environment variables from .env into ENV (process.env)
 // Add your application configuration to your .env file in the root of your project
-var dotenv = require('dotenv');
-dotenv.load();
+//var dotenv = require('dotenv');
+//dotenv.load();
 
 
 //Connect Redis
