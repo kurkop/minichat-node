@@ -8,7 +8,14 @@ var server = express();
 server.http().io()
 
 //Connect Redis
-var RedisStore = require('connect-redis')(express);
+if (process.env.REDISTOGO_URL) {
+  var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+  var RedisStore = require("redis").createClient(rtg.port, rtg.hostname);
+
+  redis.auth(rtg.auth.split(":")[1]);
+} else {
+    var RedisStore = require('connect-redis')(express);
+}
 
 var users = [];
 
