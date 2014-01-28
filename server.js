@@ -13,26 +13,17 @@ server.http().io()
 var dotenv = require('dotenv');
 dotenv.load();
 
-// Swig will cache templates for you, but you can disable
-// that and use Express's caching instead, if you like:
-server.set('view cache', true);
-// To disable Swig's cache, do the following:
-swig.setDefaults({ cache: false });
 
 //Connect Redis
 if (process.env.REDISTOGO_URL) {
-
-  var redisUrl = url.parse(process.env.REDISTOGO_URL);
-  var redisAuth = redisUrl.auth.split(":"); // auth 1st part is username and 2nd is password separated by ":"
-
   var SessionStore = new RedisStore({
-    //client: redis,
-    host: redisUrl.hostname,
-    port: redisUrl.port,
-    //user: conf.redis.user,
-    //db: redisAuth[0],
-    //pass: redisAuth[1]
-  })
+      //client: redis,
+      host: '127.0.0.1',
+      port: 6379,
+      //user: conf.redis.user,
+      //db: 'mydb',
+      //pass: 'RedisPASS'
+    })
 } else {
     var SessionStore = new RedisStore({
       //client: redis,
