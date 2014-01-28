@@ -8,6 +8,11 @@ var express = require('express.io'),
 var server = express();
 server.http().io()
 
+// Dotenv loads environment variables from .env into ENV (process.env)
+// Add your application configuration to your .env file in the root of your project
+var dotenv = require('dotenv');
+dotenv.load();
+
 //Connect Redis
 if (process.env.REDISTOGO_URL) {
   var redisUrl = url.parse(process.env.REDISTOGO_URL);
