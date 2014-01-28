@@ -15,7 +15,10 @@ server.http().io()
 
 //Connect Redis
 if (process.env.REDISTOGO_URL) {
-  var SessionStore = new RedisStore({
+  var redisUrl = url.parse(process.env.REDISTOGO_URL);
+    var redisAuth = redisUrl.auth.split(":"); // auth 1st part is username and 2nd is password separated by ":"
+
+    var SessionStore = new RedisStore({
       //client: redis,
       host: '127.0.0.1',
       port: 6379,
