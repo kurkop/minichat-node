@@ -1,6 +1,7 @@
 var express = require('express.io'),
     swig = require('swig'),
     _ = require('underscore'),
+    RedisStore = require('connect-redis')(express),
     passport = require('passport');
 
 //Connect Express.io
@@ -9,12 +10,26 @@ server.http().io()
 
 //Connect Redis
 if (process.env.REDISTOGO_URL) {
-  var rtg   = require("url").parse(process.env.REDISTOGO_URL);
-  var RedisStore = require("connect-redis").createClient(rtg.port, rtg.hostname);
+  var redisUrl = url.parse(process.env.REDISTOGO_URL);
+    var redisAuth = redisUrl.auth.split(":"); // auth 1st part is username and 2nd is password separated by ":"
 
-  RedisStore.auth(rtg.auth.split(":")[1]);
+    var SessionStore = new RedisStore({
+        //client: redis,
+        host: redisUrl.hostname,
+        port: redisUrl.port,
+        //user: conf.redis.user,
+        db: redisAuth[0],
+        pass: redisAuth[1]
+     });
 } else {
-    var RedisStore = require('connect-redis')(express);
+    var SessionStore = new RedisStore({
+      //client: redis,
+      host: '127.0.0.1',
+      port: 6379,
+      //user: conf.redis.user,
+      //db: 'mydb',
+      //pass: 'RedisPASS'
+    });
 }
 
 var users = [];
@@ -36,16 +51,13 @@ server.configure(function(){
   server.use( express.cookieParser() );
   server.use( express.bodyParser() );
 
-  server.use( express.session({
-    secret : "secretHach93849",
-    store  : new RedisStore({})
-    // store  : new RedisStore({
-    //  host : conf.redis.host,
-    //  port : conf.redis.port,
-    //  user : conf.redis.user,
-    //  pass : conf.redis.pass
-    // });  
-  }) );
+  server.use( 
+    express.session({
+      secret : "secretHach93849",
+      store  : SessionStore,
+      cookie : { maxAge: 60000 * 60 * 2 } // 2h Session lifetime
+    })
+  );
 });
 
 
