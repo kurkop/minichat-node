@@ -10,22 +10,19 @@ server.http().io()
 
 // Dotenv loads environment variables from .env into ENV (process.env)
 // Add your application configuration to your .env file in the root of your project
-var dotenv = require('dotenv');
-dotenv.load();
+//var dotenv = require('dotenv');
+//dotenv.load();
 
 //Connect Redis
 if (process.env.REDISTOGO_URL) {
-  var redisUrl = url.parse(process.env.REDISTOGO_URL);
-    var redisAuth = redisUrl.auth.split(":"); // auth 1st part is username and 2nd is password separated by ":"
-
-    var SessionStore = new RedisStore({
-        //client: redis,
-        host: redisUrl.hostname,
-        port: redisUrl.port,
-        //user: conf.redis.user,
-        db: redisAuth[0],
-        pass: redisAuth[1]
-     });
+  var SessionStore = new RedisStore({
+      //client: redis,
+      host: '127.0.0.1',
+      port: 6379,
+      //user: conf.redis.user,
+      //db: 'mydb',
+      //pass: 'RedisPASS'
+    })
 } else {
     var SessionStore = new RedisStore({
       //client: redis,
@@ -34,7 +31,7 @@ if (process.env.REDISTOGO_URL) {
       //user: conf.redis.user,
       //db: 'mydb',
       //pass: 'RedisPASS'
-    });
+    })
 }
 
 var users = [];
